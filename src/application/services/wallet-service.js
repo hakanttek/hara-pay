@@ -1,5 +1,5 @@
 // Import necessary modules from the Hedera Hashgraph SDK
-const { Client, PrivateKey, AccountId, Hbar, TransferTransaction, AccountCreateTransaction } = require('@hashgraph/sdk');
+const { Client, PrivateKey, AccountId, Hbar, TransferTransaction, AccountCreateTransaction, AccountBalanceQuery } = require('@hashgraph/sdk');
 
 class WalletService {
 
@@ -22,15 +22,24 @@ class WalletService {
 
     // Function to transfer Hbars between accounts
     async transferFunds(senderId, senderKey, receiverId, amount) {
-        const tx = await new TransferTransaction()
-            .addHbarTransfer(senderId, new Hbar(-amount)) // Deduct amount from sender
-            .addHbarTransfer(receiverId, new Hbar(amount)) // Add amount to receiver
-            .freezeWith(this.client)
-            .sign(senderKey) // Sign the transaction with the sender's private key
-            .execute(this.client);
+        const tx = new TransferTransaction()
+            .addHbarTransfer(AccountId.fromString(senderId), new Hbar(-amount)) // Deduct amount from sender
+            .addHbarTransfer(AccountId.fromString(receiverId), new Hbar(amount)); // Add amount to receiver
 
-        const receipt = await tx.getReceipt(this.client);
-        return { status: receipt.status.toString(), transactionId: tx.transactionId.toString() };
+        const signedTx = await tx.freezeWith(this.client).sign(PrivateKey.fromString(senderKey));
+        const response = await signedTx.execute(this.client);
+        const receipt = await response.getReceipt(this.client);
+
+        return { status: receipt.status.toString(), transactionId: response.transactionId.toString() };
+    }
+
+    // Function to get the balance of an existing account
+    async getAccountBalance(accountId) {
+        const balanceQuery = new AccountBalanceQuery()
+            .setAccountId(AccountId.fromString(accountId));
+
+        const balance = await balanceQuery.execute(this.client);
+        return balance; // Return the balance as a string
     }
 }
 

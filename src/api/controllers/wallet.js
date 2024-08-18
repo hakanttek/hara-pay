@@ -7,6 +7,7 @@ class WalletController {
     // Bind the methods to ensure `this` context is correct
     this.createWallet = this.createWallet.bind(this);
     this.transferFunds = this.transferFunds.bind(this);
+    this.getAccountBalance = this.getAccountBalance.bind(this);
   }
 
   // Method to create a new wallet
@@ -27,7 +28,19 @@ class WalletController {
       const status = await this.walletService.transferFunds(senderId, senderKey, receiverId, amount);
       res.json({ status: status.status, transactionId: status.transactionId });
     } catch (error) {
+      console.log(error)
       res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getAccountBalance(req, res) {
+    const { accountId } = req.body;
+    try {
+      var balance = await this.walletService.getAccountBalance(accountId)
+      res.json({ foo: balance.hbars.toString() });
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({ error: err.message })
     }
   }
 }

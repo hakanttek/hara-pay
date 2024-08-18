@@ -97,4 +97,38 @@ router.post('/create', container.get(WalletController).createWallet);
  */
 router.post('/transfer', container.get(WalletController).transferFunds);
 
+/**
+ * @swagger
+ * /wallet/balance:
+ *   post:
+ *     summary: Retrieves the balance of a wallet
+ *     tags: [Wallet]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               accountId:
+ *                 type: string
+ *                 description: Account ID of the wallet to check the balance of
+ *                 example: 0.0.123
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved wallet balance
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 balance:
+ *                   type: integer
+ *                   description: The current balance of the wallet
+ *                   example: 1000
+ *       500:
+ *         description: Server error
+ */
+router.post('/balance', container.get(WalletController).getAccountBalance);
+
 module.exports = router;
