@@ -1,8 +1,8 @@
-const { Client, PrivateKey, Hbar, TransferTransaction, TransactionId } = require('@hashgraph/sdk');
+const { Client, Hbar, TransferTransaction, TransactionId } = require('@hashgraph/sdk');
 
 class HbarFaucetService {
-    constructor(faucetPrivateKey, faucetAccountId, network) {
-        this.client = Client.forNetwork(network);
+    constructor(faucetAccountId, faucetPrivateKey) {
+        this.client = Client.forTestnet();
         this.client.setOperator(faucetAccountId, faucetPrivateKey);
     }
 
