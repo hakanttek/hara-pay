@@ -13,6 +13,7 @@ class HbarFaucetController {
       const status = await this.hbarFaucetService.transferHbar(toAccountId, amount);
       res.json({ status: status.toString() });
     } catch (error) {
+      console.log(error)
       res.status(500).json({ error: error.message });
     }
   }

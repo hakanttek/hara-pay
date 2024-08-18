@@ -9,17 +9,13 @@ const express = require('express');
 const router = express.Router();
 const HbarFaucetController = require('../controllers/hbar-faucet');
 const HbarFaucetService = require('hara-pay.application/services/hbar-faucet-service');
-
-const accountId = process.env.ACCOUNT_ID;
-const privateKey = process.env.PRIVATE_KEY;
-const hbarFaucetService = new HbarFaucetService(accountId, privateKey);
-const hbarFaucetController = new HbarFaucetController(hbarFaucetService);
+const { container } = require('../container');
 
 /**
  * @swagger
- * /transfer:
+ * /hbar-faucet/transfer:
  *   post:
- *     summary: Transfer HBAR from one account to another
+ *     summary: Transfer HBAR from the operator to a specified account
  *     tags: [HBAR Faucet]
  *     requestBody:
  *       required: true
@@ -28,15 +24,7 @@ const hbarFaucetController = new HbarFaucetController(hbarFaucetService);
  *           schema:
  *             type: object
  *             properties:
- *               senderId:
- *                 type: string
- *                 description: Account ID of the sender
- *                 example: 0.0.1234
- *               senderKey:
- *                 type: string
- *                 description: Private key of the sender's account
- *                 example: 302e020100300506032b657004220420...
- *               receiverId:
+ *               toAccountId:
  *                 type: string
  *                 description: Account ID of the receiver
  *                 example: 0.0.5678
@@ -56,10 +44,6 @@ const hbarFaucetController = new HbarFaucetController(hbarFaucetService);
  *                   type: string
  *                   description: Status of the transaction
  *                   example: SUCCESS
- *                 transactionId:
- *                   type: string
- *                   description: ID of the transaction
- *                   example: 0.0.1234@1620123456.7890
  *       500:
  *         description: Server error
  *         content:
@@ -70,8 +54,8 @@ const hbarFaucetController = new HbarFaucetController(hbarFaucetService);
  *                 error:
  *                   type: string
  *                   description: Error message
- *                   example: Insufficient balance
+ *                   example: Insufficient balance or other error message
  */
-router.post('/transfer', hbarFaucetController.transferHbar);
+router.post('/transfer', container.get(HbarFaucetController).transferHbar);
 
 module.exports = router;

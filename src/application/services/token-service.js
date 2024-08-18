@@ -1,13 +1,12 @@
 const { Client, TokenCreateTransaction, TransferTransaction, TokenType, AccountBalanceQuery, PrivateKey } = require("@hashgraph/sdk");
 
 class TokenService {
-  constructor(accountId, privateKey) {
+  constructor(client, operatorPrivateKey) {
     // Create a PrivateKey object from the string
-    this.operatorPrivateKey = PrivateKey.fromString(privateKey);
+    this.operatorPrivateKey = PrivateKey.fromString(operatorPrivateKey);
 
     // Set the Client operator
-    this.client = Client.forTestnet()
-      .setOperator(accountId, this.operatorPrivateKey);
+    this.client = client;
   }
 
   async createToken(name, symbol, decimals, initialSupply, treasuryAccountId) {

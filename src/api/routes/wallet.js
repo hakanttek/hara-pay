@@ -1,4 +1,6 @@
 const express = require('express');
+const WalletController = require('../controllers/wallet');
+const { container } = require('../container');
 /**
  * @swagger
  * tags:
@@ -6,14 +8,6 @@ const express = require('express');
  *   description: API for managing wallets and fund transfers
  */
 const router = express.Router();
-const WalletController = require('../controllers/wallet');
-const WalletService = require('hara-pay.application/services/wallet-service');
-
-// Instantiate WalletService and WalletController
-const accountId = process.env.ACCOUNT_ID;
-const privateKey = process.env.PRIVATE_KEY;
-const walletService = new WalletService(accountId, privateKey);
-const walletController = new WalletController(walletService);
 
 /**
  * @swagger
@@ -51,7 +45,7 @@ const walletController = new WalletController(walletService);
  *       500:
  *         description: Server error
  */
-router.post('/create', walletController.createWallet);
+router.post('/create', container.get(WalletController).createWallet);
 
 /**
  * @swagger
@@ -101,6 +95,6 @@ router.post('/create', walletController.createWallet);
  *       500:
  *         description: Server error
  */
-router.post('/transfer', walletController.transferFunds);
+router.post('/transfer', container.get(WalletController).transferFunds);
 
 module.exports = router;

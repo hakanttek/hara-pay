@@ -8,14 +8,7 @@ const express = require('express');
 const router = express.Router();
 const TokenController = require('../controllers/token');
 const TokenService = require('hara-pay.application/services/token-service');
-
-/* @test: comment these variables for testing purpose
-// TODO: remove when testing is done 
-const accountId = process.env.ACCOUNT_ID;
-const privateKey = process.env.PRIVATE_KEY;
-const tokenService = new TokenService(accountId, privateKey);
-const tokenController = new TokenController(tokenService);
-*/
+const { container } = require('../container');
 
 /**
  * @swagger
@@ -65,7 +58,7 @@ const tokenController = new TokenController(tokenService);
  *         description: Server error
  */
 // @test: comment this function for testing purpose
-// router.post('/create', tokenController.createToken);
+router.post('/create', container.get(TokenController).createToken);
 
 /**
  * @swagger
@@ -112,6 +105,6 @@ const tokenController = new TokenController(tokenService);
  *         description: Server error
  */
 // @test: comment this function for testing purpose
-// router.post('/transfer', tokenController.transferToken);
+router.post('/transfer', container.get(TokenController).transferToken);
 
 module.exports = router;

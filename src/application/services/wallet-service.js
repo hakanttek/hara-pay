@@ -3,10 +3,8 @@ const { Client, PrivateKey, AccountId, Hbar, TransferTransaction, AccountCreateT
 
 class WalletService {
 
-    constructor(operatorId, operatorKey) {
-        // Initialize client
-        this.client = Client.forTestnet(); // Use Client.forMainnet() for production
-        this.client.setOperator(operatorId, operatorKey);
+    constructor(client) {
+        this.client = client
     }
 
     // Function to create a new wallet (account) with initial balance
