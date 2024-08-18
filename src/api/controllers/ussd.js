@@ -8,7 +8,22 @@ const {
     validEmail,
     verifyNewUser,
     firestore,
-    addUserKycToDB
+    addUserKycToDB,
+    getRecipientId,
+    checkIfRecipientExists,
+    getSenderDetails,
+    getSenderPrivateKey,
+    getReceiverDetails,
+    sendcUSD,
+    getTxidUrl,
+    sendMessage,
+    phoneUtil,
+    PNF,
+    addUserDataToDB,
+    admin,
+    iv,
+    TokenService,
+    PrivateKey
 } = require('hara-pay.application/services/ussd-service')
 const ussdCallback = async (req, res) => {
     res.set('Content-Type: text/plain');
@@ -29,8 +44,10 @@ const ussdCallback = async (req, res) => {
     let userExists = await checkIfSenderExists(senderId);
     // console.log("Sender Exists? ",userExists);
     if(userExists === false){       
-      let userCreated = await createNewUser(senderId, senderMSISDN);     
+      let userCreated = await createNewUser(senderId, senderMSISDN);   
+      let userData = await addUserDataToDB(senderId, senderMSISDN);  
       console.log('Created user with userID: ', userCreated); 
+      console.log('Created user with userData: ', userData); 
       // msg += `END Creating your account on HaraPay`;    
     }
   
@@ -124,9 +141,154 @@ const ussdCallback = async (req, res) => {
           return;
         }
       }
-    } else {
-      res.send("END Congrats! User is verified");
     }
-}
+
+    else if (text === '' ) {
+      msg = 'CON Welcome to Harapay:';
+      msg += '\n1: View Account';
+      msg += '\n2: Send Money';
+      msg += '\n3: Deposit Fund (WIP)';
+      msg += '\n4: Withdraw Cash (WIP)';
+      res.send(msg);
+    }     
+
+    //  1. TRANSFER FUNDS #SEND MONEY
+    else if ( data[0] == '2' && data[1] == null) { 
+      msg = `CON Enter Recipient`;
+      msg += footer;
+      res.send(msg);
+    } else if ( data[0] == '2' && data[1]!== '' && data[2] == null) {  //  TRANSFER && PHONENUMBER
+      msg = `CON Enter Amount to Send:`;
+      msg += footer;
+      res.send(msg);
+        
+    } else if ( data[0] == '2' && data[1] !== '' && data[2] !== '' ) {//  TRANSFER && PHONENUMBER && AMOUNT
+      senderMSISDN = phoneNumber.substring(1);
+      // console.log('sender: ', senderMSISDN);
+      try { receiverMSISDN = phoneUtil.format(phoneUtil.parseAndKeepRawInput(`${data[1]}`, 'KE'), PNF.E164) } catch (e) { console.log(e) }
+
+      receiverMSISDN = receiverMSISDN.substring(1);  
+      amount = data[2];
+      let cusdAmount = parseFloat(amount);
+      cusdAmount = cusdAmount*0.0092165;
+      senderId = await getSenderId(senderMSISDN)
+      // console.log('senderId: ', senderId);
+      recipientId = await getRecipientId(receiverMSISDN)
+      // console.log('recipientId: ', recipientId);
+
+      let recipientstatusresult = await checkIfRecipientExists(recipientId);
+      // console.log("Recipient Exists? ",recipientstatusresult);
+      
+      if(recipientstatusresult == false){ 
+        let recipientUserId = await createNewUser(recipientId, receiverMSISDN); 
+        let recipientData = await addUserDataToDB(recipientId, receiverMSISDN);
+        
+        console.log('New Recipient', recipientUserId);
+        console.log('New recipient data', recipientData);
+      }  
+      
+      // Retrieve User Blockchain Data
+      let senderInfo = await getSenderDetails(senderId);
+      let senderprivkey = await getSenderPrivateKey(senderInfo.data().seedKey, senderMSISDN, iv)
+
+      let receiverInfo = await getReceiverDetails(recipientId);
+      while (receiverInfo.data() === undefined || receiverInfo.data() === null || receiverInfo.data() === ''){
+        await sleep(1000);
+        receiverInfo = await getReceiverDetails(recipientId);
+      }
+
+      let senderName = '';
+      await admin.auth().getUser(senderId).then(user => { senderName = user.displayName; return; }).catch(e => {console.log(e)})  
+      console.log('Sender fullName: ', senderName);
+
+      let receiverName = '';
+      await admin.auth().getUser(recipientId).then(user => { receiverName = user.displayName; return; }).catch(e => {console.log(e)})  
+      console.log('Receiver fullName: ', receiverName);
+      let _receiver = '';
+
+
+      const tokenService = TokenService(PrivateKey.fromStringECDSA(senderprivkey).publicKey.toAccountId(), senderprivkey)
+      
+
+      let receipt = await tokenService.transferHbar(senderInfo.data().publicAddress, receiverInfo.data().publicAddress, cusdAmount);
+      if(receipt === 'failed'){
+        msg = `END Your transaction has failed due to insufficient balance`;  
+        res.send(msg);
+        return;
+      }
+
+      if(receiverName==undefined || receiverName==''){_receiver=receiverMSISDN; } else{ _receiver=receiverName;}
+
+      let url = await getTxidUrl(receipt.transactionHash);
+      let message2sender = `KES ${amount}  sent to ${_receiver}.\nTransaction URL:  ${url}`;
+      let message2receiver = `You have received KES ${amount} from ${senderName}.\nTransaction Link:  ${url}`;
+      console.log('tx URL', url);
+      msg = `END KES ${amount} sent to ${_receiver}. \nTransaction Details: ${url}`;  
+      res.send(msg);
+
+      sendMessage("+"+senderMSISDN, message2sender);
+      sendMessage("+"+receiverMSISDN, message2receiver);        
+    }
+
+    //  4. ACCOUNT DETAILS
+    else if ( data[0] == '1' && data[1] == null) {
+      // Business logic for first level msg
+      msg = `CON Choose account information you want to view`;
+      msg += `\n1. Account Details`;
+      msg += `\n2. Account balance`;
+      msg += `\n3. Account Backup`;
+      msg += `\n4. PIN Reset`
+      msg += footer;
+      res.send(msg);
+    }else if ( data[0] == '1' && data[1] == '1') {
+      // let userMSISDN = phoneNumber.substring(1);
+      // msg = await getAccDetails(userMSISDN);  
+      // res.send(msg);      
+    }else if ( data[0] == '1'  && data[1] == '2') {
+      let userMSISDN = phoneNumber.substring(1);
+      const senderId = await getSenderId(userMSISDN)
+      let senderInfo = await getSenderDetails(senderId)
+      const tokenService = await new TokenService(senderInfo.data().publicAddress, await getSenderPrivateKey(senderInfo.data().seedKey, userMSISDN, iv))
+      msg = await tokenService.getHbarBalance(senderInfo.data().publicAddress);  
+      res.send(msg);      
+    }else if ( data[0] == '1'  && data[1] == '3') {
+      // let userMSISDN = phoneNumber.substring(1);
+      // msg = await getSeedKey(userMSISDN); 
+      // res.send(msg);       
+    }else if ( data[0] == '1'  && data[1] == '4') {
+      let userMSISDN = phoneNumber.substring(1);
+      let userId = await getSenderId(userMSISDN)
+      // await admin.auth().setCustomUserClaims(userId, {verifieduser: false});
+      // await firestore.collection('hashfiles').doc(userId).delete()
+      // await firestore.collection('kycdb').doc(userId).delete()
+      // Send Email to user:
+
+      /*
+      try{
+        let userEmail = '';
+        await admin.auth().getUser(userId).then(user => { userEmail = user.email; return; }).catch(e => {console.log(e)}) 
+        console.log('User Email: ', userEmail, 'userId: ',userId); 
+        
+        let newUserPin = await getPinFromUser();
+        let enc_loginpin = await createcypher(newUserPin, userMSISDN, iv);
+        await firestore.collection('hashfiles').doc(userId).update({'enc_pin' : `${enc_loginpin}`})  
+        const message = `Your HaraPay PIN has been reset to: ${newUserPin}`;
+        const gmailSendOptions = {
+          "user": functions.config().env.gmail.user,
+          "pass": functions.config().env.gmail.pass,
+          "to": userEmail,
+          "subject": "HaraPay PIN"
+        }
+        sendGmail(gmailSendOptions, message);
+        msg = `END Password reset was successful.\n Kindly check ${userEmail} for Details`; 
+        res.send(msg);
+      }catch(e){
+        console.log(`No Email Address`, e);
+        msg = `END Password reset failed: You dont have a valid email d`; 
+        res.send(msg);
+      }
+      */
+    }
+    }
 
 module.exports = { ussdCallback }
