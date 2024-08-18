@@ -10,10 +10,16 @@ var ussdRouter = require('./routes/ussd');
 const tokenRouter = require('./routes/token')
 const walletRouter = require('./routes/wallet')
 const hbarFaucetRouter = require('./routes/hbar-faucet')
+const fs = require('fs');
 
 const { specs, swaggerUi } = require('./swagger');
 
 var app = express();
+
+const envPath = path.resolve(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+  require('dotenv').config();
+}
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
