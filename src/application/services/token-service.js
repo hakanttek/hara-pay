@@ -1,4 +1,4 @@
-const { Client, TokenCreateTransaction, TransferTransaction, TokenType, PrivateKey } = require("@hashgraph/sdk");
+const { Client, TokenCreateTransaction, TransferTransaction, TokenType, AccountBalanceQuery, PrivateKey } = require("@hashgraph/sdk");
 
 class TokenService {
   constructor(accountId, privateKey) {
@@ -36,6 +36,25 @@ class TokenService {
     const submitTx = await signTx.execute(this.client);
     const receipt = await submitTx.getReceipt(this.client);
     return receipt.status;
+  }
+
+  async transferHbar(fromAccountId, toAccountId, amount) {
+    const receipt = await new TransferTransaction()
+    .addHbarTransfer(fromAccountId, Hbar.fromTinybars(-amount)) //Sending account
+    .addHbarTransfer(toAccountId, Hbar.fromTinybars(amount)) //Receiving account
+    .execute(client);
+
+    return receipt.status;
+  }
+
+  async getHbarBalance(accountId) {
+    const query = new AccountBalanceQuery()
+    .setAccountId(accountId);
+
+    const accountBalance = await query.execute(client);
+    console.log("The hbar account balance for this account is " +accountBalance.hbars);
+
+    return accountBalance.hbars;
   }
 }
 

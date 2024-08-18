@@ -153,6 +153,11 @@ const { transfercGOLD,
 // const { getIcxUsdtPrice } = require('./iconnect');
 const { resolve } = require('path');
 
+const { Mnemonic, PrivateKey } = require("@hashgraph/sdk");
+
+const TokenService = require('./token-service')
+
+
 // const kit = getContractKit();
 
 // GLOBAL VARIABLES
@@ -459,7 +464,11 @@ async function addUserDataToDB(userId, userMSISDN){
   try {    
     let mnemonic = await bip39.generateMnemonic(256);
     var enc_seed = await createcypher(mnemonic, userMSISDN, iv);
-    let publicAddress = await getPublicAddress(mnemonic);
+
+    const recoveredMnemonic = await Mnemonic.fromString(mnemonic.toString());
+    const privateKey = await recoveredMnemonic.toStandardECDSAsecp256k1PrivateKey();
+    const publicAddress = privateKey.publicKey.toEvmAddress();
+  
     console.log('Public Address: ', publicAddress);
 
     const newAccount = {
@@ -672,5 +681,20 @@ module.exports = {
   validEmail,
   verifyNewUser,
   firestore,
-  addUserKycToDB
+  addUserKycToDB,
+  getRecipientId,
+  checkIfRecipientExists,
+  getSenderDetails,
+  getSenderPrivateKey,
+  getReceiverDetails,
+  sendcUSD,
+  getTxidUrl,
+  sendMessage,
+  phoneUtil,
+  PNF,
+  addUserDataToDB,
+  admin,
+  TokenService,
+  PrivateKey,
+  iv
 }
