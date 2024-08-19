@@ -120,8 +120,8 @@ var { getTxidUrl,
   isValidKePhoneNumber
 } = require('../utilities/ussd');
 
-//ENV VARIABLES
-// const iv = functions.config().env.crypto_iv.key;
+// ENV VARIABLES
+// @TODO: store this in a remote safe cloud to secure cryptographic operations
 const iv = "functions.config().env.crypto_iv.key;"
 // const enc_decr_fn = functions.config().env.algo.enc_decr;
 // const  phone_hash_fn = functions.config().env.algo.msisdn_hash;
@@ -662,15 +662,12 @@ function createNewUser(userId, userMSISDN) {
   });
 }
 
-async function verifyNewUser(userId, email, newUserPin, password, firstname, lastname, idnumber, dateofbirth, userMSISDN) {
+async function verifyNewUser(userId, email, newUserPin, password) {
   return new Promise(resolve => {
     admin.auth().updateUser(userId, {
       email: `${email}`,
       password: `${password}`,
       emailVerified: false,
-      displayName: `${firstname} ${lastname}`,
-      idnumber: `${idnumber}`,
-      dateofbirth: `${dateofbirth}`,
       disabled: false
     })
       .then(userRecord => {
@@ -712,5 +709,6 @@ module.exports = {
   TokenService,
   PrivateKey,
   Client,
+  getLoginPin,
   iv
 }

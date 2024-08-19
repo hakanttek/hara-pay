@@ -43,7 +43,7 @@ class TokenService {
       .addHbarTransfer(toAccountId, Hbar.from(amount)) //Receiving account
       .execute(this.client);
 
-    return receipt.status;
+    return receipt;
   }
 
   async getHbarBalance(accountId) {

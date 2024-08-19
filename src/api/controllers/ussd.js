@@ -24,6 +24,7 @@ const {
   iv,
   TokenService,
   Client,
+  getLoginPin,
   PrivateKey
 } = require('hara-pay.application/services/ussd-service')
 const ussdCallback = async (req, res) => {
@@ -74,63 +75,63 @@ const ussdCallback = async (req, res) => {
     } else if (data[0] !== '' && data[1] !== '' && data[2] == null) {
       confirmUserPin = data[1];
 
-      msg = `CON Enter ID Document Type:\n1. National ID \n2. Passport \n3. AlienID`;
-      res.send(msg);
-    } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] == null) {
-      if (data[2] === '1') { documentType = 'ID' }
-      else if (data[2] === '2') { documentType = 'Passport' }
-      else if (data[2] === '3') { documentType = 'AlienID' }
-      else { documentType = 'ID' }
+      //   msg = `CON Enter ID Document Type:\n1. National ID \n2. Passport \n3. AlienID`;
+      //   res.send(msg);
+      // } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] == null) {
+      //   if (data[2] === '1') { documentType = 'ID' }
+      //   else if (data[2] === '2') { documentType = 'Passport' }
+      //   else if (data[2] === '3') { documentType = 'AlienID' }
+      //   else { documentType = 'ID' }
 
-      msg = `CON Enter ${documentType} Number`;
-      res.send(msg);
-    } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] !== '' && data[4] == null) { //data[0] !== null && data[0] !== '' && data[1] == null
-      documentNumber = data[3];
+      //   msg = `CON Enter ${documentType} Number`;
+      //   res.send(msg);
+      // } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] !== '' && data[4] == null) { //data[0] !== null && data[0] !== '' && data[1] == null
+      //   documentNumber = data[3];
 
-      msg = `CON Enter First Name`;
-      res.send(msg);
-    } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] !== '' && data[4] !== '' && data[5] == null) { //data[0] !== null && data[0] !== '' && data[1] == null
-      firstname = data[4];
-      // console.log('Firstname: ', firstname);
+      //   msg = `CON Enter First Name`;
+      //   res.send(msg);
+      // } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] !== '' && data[4] !== '' && data[5] == null) { //data[0] !== null && data[0] !== '' && data[1] == null
+      //   firstname = data[4];
+      //   // console.log('Firstname: ', firstname);
 
-      msg = `CON Enter Last Name`;
-      res.send(msg);
-    } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] !== '' && data[4] !== '' && data[5] !== '' && data[6] == null) { //data[0] !== null && data[0] !== '' && data[1] == null
-      lastname = data[5];
-      // console.log('Lastname: ', lastname);
+      //   msg = `CON Enter Last Name`;
+      //   res.send(msg);
+      // } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] !== '' && data[4] !== '' && data[5] !== '' && data[6] == null) { //data[0] !== null && data[0] !== '' && data[1] == null
+      //   lastname = data[5];
+      //   // console.log('Lastname: ', lastname);
 
-      msg = `CON Enter Date of Birth.\nFormat: YYYY-MM-DD`;
-      res.send(msg);
-    } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] !== '' && data[4] !== '' && data[5] !== '' && data[6] !== '' && data[7] == null) { //data[0] !== null && data[0] !== '' && data[1] == null
-      dateofbirth = data[6];
+      //   msg = `CON Enter Date of Birth.\nFormat: YYYY-MM-DD`;
+      //   res.send(msg);
+      // } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] !== '' && data[4] !== '' && data[5] !== '' && data[6] !== '' && data[7] == null) { //data[0] !== null && data[0] !== '' && data[1] == null
+      //   dateofbirth = data[6];
 
       msg = `CON Enter Email Address`;
       res.send(msg);
-    } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] !== '' && data[4] !== '' && data[5] !== '' && data[6] !== '' && data[7] !== '') { //data[0] !== null && data[0] !== '' && data[1] == null
-      email = data[7];
+    } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] == null) { //data[0] !== null && data[0] !== '' && data[1] == null
+      email = data[2];
       let userMSISDN = phoneNumber.substring(1);
       let userId = await getSenderId(userMSISDN);
       let enc_loginpin = await createcypher(newUserPin, userMSISDN, iv);
       let isvalidEmail = await validEmail(email);
       console.log(isvalidEmail);
-      console.log(`User Details=>${userId} : ${newUserPin} : ${confirmUserPin} : ${documentType} : ${documentNumber} : ${firstname} : ${lastname} : ${dateofbirth} : ${email} : ${enc_loginpin}`);
+      // console.log(`User Details=>${userId} : ${newUserPin} : ${confirmUserPin} : ${documentType} : ${documentNumber} : ${firstname} : ${lastname} : ${dateofbirth} : ${email} : ${enc_loginpin}`);
 
       if (newUserPin === confirmUserPin && newUserPin.length >= 4) {
-        msg = `END Thank You. \nYour Account Details will be verified shortly`;
+        msg = `END Thank You. \nYour Account Details will be ready shortly`;
         res.send(msg);
         try {
-          let kycData = {
-            "documentType": documentType,
-            "documentNumber": documentNumber,
-            "dateofbirth": dateofbirth,
-            "fullName": `${firstname} ${lastname}`
-          }
+          // let kycData = {
+          //   "documentType": documentType,
+          //   "documentNumber": documentNumber,
+          //   "dateofbirth": dateofbirth,
+          //   "fullName": `${firstname} ${lastname}`
+          // }
 
           //Update User account and enable
-          let updateinfo = await verifyNewUser(userId, email, newUserPin, enc_loginpin, firstname, lastname, documentNumber, dateofbirth, userMSISDN);
+          let updateinfo = await verifyNewUser(userId, email, newUserPin, enc_loginpin);
           await firestore.collection('hashfiles').doc(userId).set({ 'enc_pin': `${enc_loginpin}` });
 
-          let newkycdata = await addUserKycToDB(userId, kycdata);
+          // let newkycdata = await addUserKycToDB(userId, kycdata);
 
         } catch (e) { console.log('KYC Failed: No data received') }
       }
@@ -150,36 +151,50 @@ const ussdCallback = async (req, res) => {
 
   else if (text === '') {
     msg = 'CON Welcome to Harapay:';
-    msg += '\n1: View Account';
-    msg += '\n2: Send Money';
-    msg += '\n3: Deposit Fund (WIP)';
-    msg += '\n4: Withdraw Cash (WIP)';
+    msg += '\n\nPlease how we can help you?\n';
+    msg += '\n1: Create Wallet';
+    msg += '\n2: Buy Token';
+    msg += '\n3: Transfer Token';
+    msg += '\n4: Deposit Token';
+    msg += '\n5: Withdraw';
+    msg += '\n6: View Balance';
+    msg += '\n7: My Account';
+    msg += '\n8: Exit';
     res.send(msg);
   }
 
   //  1. TRANSFER FUNDS #SEND MONEY
-  else if (data[0] == '2' && data[1] == null) {
+  else if (data[0] == '3' && data[1] == null) {
     msg = `CON Enter Recipient`;
-    msg += footer;
+    // msg += footer;
     res.send(msg);
-  } else if (data[0] == '2' && data[1] !== '' && data[2] == null) {  //  TRANSFER && PHONENUMBER
+  } else if (data[0] == '3' && data[1] !== '' && data[2] == null) {  //  TRANSFER && PHONENUMBER
     msg = `CON Enter Amount to Send:`;
-    msg += footer;
+    // msg += footer;
     res.send(msg);
 
-  } else if (data[0] == '2' && data[1] !== '' && data[2] !== '') {//  TRANSFER && PHONENUMBER && AMOUNT
+  } else if (data[0] == '3' && data[1] !== '' && data[2] !== '' && data[3] == null) { //&& data[1].value <= 10
+    msg += `CON Enter your PIN:`;
+    res.send(msg);
+  } else if (data[0] == '3' && data[1] !== '' && data[2] !== '' && data[3] !== '' && data[4] == null) {
     senderMSISDN = phoneNumber.substring(1);
     // console.log('sender: ', senderMSISDN);
     try { receiverMSISDN = phoneUtil.format(phoneUtil.parseAndKeepRawInput(`${data[1]}`, 'KE'), PNF.E164) } catch (e) { console.log(e) }
 
     receiverMSISDN = receiverMSISDN.substring(1);
     amount = data[2];
+    let access_pin = `${data[3]}`;
     let hbarAmount = parseFloat(amount);
     // hbarAmount = hbarAmount * 0.0092165;
     senderId = await getSenderId(senderMSISDN)
     // console.log('senderId: ', senderId);
     recipientId = await getRecipientId(receiverMSISDN)
-    // console.log('recipientId: ', recipientId);
+
+    let saved_access_pin = await getLoginPin(senderId);
+    let _access_pin = await createcypher(access_pin, senderMSISDN, iv);
+
+    if (_access_pin !== saved_access_pin)
+      return res.send("END Sorry! Your PIN was not corrected!")
 
     let recipientstatusresult = await checkIfRecipientExists(recipientId);
     // console.log("Recipient Exists? ",recipientstatusresult);
@@ -226,7 +241,8 @@ const ussdCallback = async (req, res) => {
 
 
     let receipt = await tokenService.transferHbar(senderInfo.data().accountId, receiverInfo.data().accountId, hbarAmount);
-    if (receipt === 'failed') {
+    console.log(receipt)
+    if (receipt.status === 'failed') {
       msg = `END Your transaction has failed due to insufficient balance`;
       res.send(msg);
       return;
@@ -238,28 +254,29 @@ const ussdCallback = async (req, res) => {
     // let message2sender = `KES ${amount}  sent to ${_receiver}.\nTransaction URL:  ${url}`;
     // let message2receiver = `You have received KES ${amount} from ${senderName}.\nTransaction Link:  ${url}`;
     // console.log('tx URL', url);
-    msg = `END ${receipt.status}`;
+    msg = `END Your transaction was successful with transactionId:`
+    msg += `\n${receipt.transactionId.toString().split("@")[0]}@`;
+    msg += `\n${receipt.transactionId.toString().split("@")[1]}`;
     res.send(msg);
 
-    sendMessage("+" + senderMSISDN, message2sender);
-    sendMessage("+" + receiverMSISDN, message2receiver);
+    // sendMessage("+" + senderMSISDN, message2sender);
+    // sendMessage("+" + receiverMSISDN, message2receiver);
   }
 
-  //  4. ACCOUNT DETAILS
-  else if (data[0] == '1' && data[1] == null) {
+  //  4. ACCOUNT BALANCE
+  else if (data[0] == '6' && data[1] == null) {
     // Business logic for first level msg
-    msg = `CON Choose account information you want to view`;
-    msg += `\n1. Account Details`;
-    msg += `\n2. Account balance`;
-    msg += `\n3. Account Backup`;
-    msg += `\n4. PIN Reset`
-    msg += footer;
-    res.send(msg);
-  } else if (data[0] == '1' && data[1] == '1') {
+    //   msg = `CON Choose account information you want to view`;
+    //   msg += `\n1. Account Details`;
+    //   msg += `\n2. Account balance`;
+    //   msg += `\n3. Account Backup`;
+    //   msg += `\n4. PIN Reset`
+    //   msg += footer;
+    //   res.send(msg);
+    // } else if (data[0] == '1' && data[1] == '1') {
     // let userMSISDN = phoneNumber.substring(1);
     // msg = await getAccDetails(userMSISDN);  
     // res.send(msg);      
-  } else if (data[0] == '1' && data[1] == '2') {
     let userMSISDN = phoneNumber.substring(1);
     const senderId = await getSenderId(userMSISDN)
     let senderInfo = await getSenderDetails(senderId)
@@ -269,7 +286,7 @@ const ussdCallback = async (req, res) => {
     const tokenService = await new TokenService(client, senderprivkey.toStringDer())
     msg = await tokenService.getHbarBalance(senderInfo.data().accountId);
     console.log(msg)
-    res.send(`END ${msg}`);
+    res.send(`END Your balance: ${msg}`);
   } else if (data[0] == '1' && data[1] == '3') {
     // let userMSISDN = phoneNumber.substring(1);
     // msg = await getSeedKey(userMSISDN); 
