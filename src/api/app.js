@@ -3,6 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const fs = require('fs');
+
+const envPath = path.resolve(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+  require('dotenv').config();
+}
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -10,16 +16,10 @@ var ussdRouter = require('./routes/ussd');
 const tokenRouter = require('./routes/token')
 const walletRouter = require('./routes/wallet')
 const hbarFaucetRouter = require('./routes/hbar-faucet')
-const fs = require('fs');
 
 const { specs, swaggerUi } = require('./swagger');
 
 var app = express();
-
-const envPath = path.resolve(__dirname, '.env');
-if (fs.existsSync(envPath)) {
-  require('dotenv').config();
-}
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
@@ -41,12 +41,12 @@ app.use('/wallet', walletRouter);
 app.use('/hbar-faucet', hbarFaucetRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
