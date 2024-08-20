@@ -1,7 +1,6 @@
 'use strict';
 
 // Firebase init
-const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const serviceAccount = require('etc/secrets/serviceAccountKey.json');
 
@@ -498,15 +497,15 @@ async function addUserDataToDB(userId, userMSISDN, nodeClient) {
 }
 
 async function signupDeposit(publicAddress) {
-  const escrowMSISDN = functions.config().env.escrow.msisdn;
-  let escrowId = await getSenderId(escrowMSISDN);
-  let escrowInfo = await getSenderDetails(escrowId);
-  let escrowPrivkey = await getSenderPrivateKey(escrowInfo.data().seedKey, escrowMSISDN, iv);
+  // const escrowMSISDN = functions.config().env.escrow.msisdn;
+  // let escrowId = await getSenderId(escrowMSISDN);
+  // let escrowInfo = await getSenderDetails(escrowId);
+  // let escrowPrivkey = await getSenderPrivateKey(escrowInfo.data().seedKey, escrowMSISDN, iv);
 
-  let receipt = await sendcUSD(escrowInfo.data().publicAddress, publicAddress, '0.01', escrowPrivkey);
-  // let celohash = await sendcGold(escrowInfo.data().publicAddress, publicAddress, '0.001', escrowPrivkey);
-  console.log(`Signup deposit tx hash: ${receipt.transactionHash}`);
-  return receipt.transactionHash;
+  // let receipt = await sendcUSD(escrowInfo.data().publicAddress, publicAddress, '0.01', escrowPrivkey);
+  // // let celohash = await sendcGold(escrowInfo.data().publicAddress, publicAddress, '0.001', escrowPrivkey);
+  // console.log(`Signup deposit tx hash: ${receipt.transactionHash}`);
+  // return receipt.transactionHash;
 }
 
 async function getSenderDetails(senderId) {
