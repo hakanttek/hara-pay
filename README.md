@@ -11,7 +11,14 @@
 
 4. **API Endpoints:** To explore and test the API endpoints, refer to the Swagger documentation available at `/api-docs/`.
 
----
+## USSD Testing (for users)
+1. Go to [AfricasTalking's Simulator](https://developers.africastalking.com/simulator).
+
+2. Enter the phone number. Click "Connect".
+
+3. Open the "phone" icon, then type this number \*384*99899#
+
+4. You will be accessible for HaraPay's service now.
 
 # What is HaraPay? 
 

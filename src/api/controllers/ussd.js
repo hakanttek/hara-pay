@@ -108,12 +108,23 @@ const ussdCallback = async (req, res) => {
       msg = `CON Enter Email Address. \n Or press 0 to skip this step.`;
       res.send(msg);
     } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] == null) { //data[0] !== null && data[0] !== '' && data[1] == null
-      email = data[2];
+
       let userMSISDN = phoneNumber.substring(1);
       let userId = await getSenderId(userMSISDN);
       let enc_loginpin = await createcypher(newUserPin, userMSISDN, iv);
-      let isvalidEmail = await validEmail(email);
-      console.log(isvalidEmail);
+      email = data[2];
+
+      if (data[2] !== '0') {
+        let isValidEmail;
+        try {
+          isvalidEmail = await validEmail(email);
+        } catch (e) {
+          res.send(`END ${e.msg}`)
+        }
+      } else {
+        email = null;
+      }
+
       // console.log(`User Details=>${userId} : ${newUserPin} : ${confirmUserPin} : ${documentType} : ${documentNumber} : ${firstname} : ${lastname} : ${dateofbirth} : ${email} : ${enc_loginpin}`);
 
       if (newUserPin === confirmUserPin && newUserPin.length >= 4) {
