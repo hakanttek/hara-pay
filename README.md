@@ -1,4 +1,4 @@
-## Setup, Configuration, and Testing Instructions
+# Setup, Configuration, and Testing Instructions
 
 1. **Firebase Service Account:** Generate the required `serviceAccountKey.json` and place it in the `etc/secrets/serviceAccountKey.json` file.
 
