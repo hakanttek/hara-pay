@@ -1,6 +1,6 @@
 ## Setup, Configuration, and Testing Instructions
 
-1. **Firebase Service Account:** Generate the required `serviceAccountKey.json` and place it in the `src/application/serviceAccountKey.json` file.
+1. **Firebase Service Account:** Generate the required `serviceAccountKey.json` and place it in the `etc/secrets/serviceAccountKey.json` file.
 
 2. **Environment Variables:** Define `ACCOUNT_ID` and `PRIVATE_KEY` (DER Encoded Private Key) in the `api/.env` file.
 
