@@ -2,7 +2,7 @@
 
 // Firebase init
 const admin = require('firebase-admin');
-const serviceAccount = require('/etc/secrets/serviceAccountKey.json');
+const serviceAccount = require('../config/serviceAccountKey.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -657,7 +657,6 @@ function createNewUser(userId, userMSISDN) {
 async function verifyNewUser(userId, email, newUserPin, password) {
   return new Promise(resolve => {
     admin.auth().updateUser(userId, {
-      email: `${email}`,
       password: `${password}`,
       emailVerified: false,
       disabled: false
