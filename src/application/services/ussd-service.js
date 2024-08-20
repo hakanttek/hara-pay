@@ -14,11 +14,6 @@ const crypto = require('crypto');
 const bip39 = require('bip39-light');
 
 // Express and CORS middleware init
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const fs = require('fs');
-const moment = require('moment');
 const { ussdRouter } = require('ussd-router');
 
 // const app = express().use(cors({ origin: true }), bodyParser.json(), bodyParser.urlencoded({ extended: true }));
@@ -98,7 +93,6 @@ const requireAuth = (req, res, next) => {
 
 const PNF = require('google-libphonenumber').PhoneNumberFormat;
 const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
-const axios = require("axios");
 // const jenga = require('./jengakit');
 
 // var randomstring = require("randomstring");
@@ -150,7 +144,6 @@ const { transfercGOLD,
 } = require('../utilities/celokit');
 
 // const { getIcxUsdtPrice } = require('./iconnect');
-const { resolve } = require('path');
 
 const { Mnemonic, PrivateKey, Client, AccountCreateTransaction, Hbar } = require("@hashgraph/sdk");
 

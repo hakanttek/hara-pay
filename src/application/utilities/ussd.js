@@ -1,5 +1,4 @@
 var tinyURL = require('tinyurl');
-const bodyParser = require('body-parser');
 const moment = require('moment');
 
 const PNF = require('google-libphonenumber').PhoneNumberFormat;
