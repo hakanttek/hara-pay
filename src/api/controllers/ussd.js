@@ -105,7 +105,7 @@ const ussdCallback = async (req, res) => {
       // } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] !== '' && data[4] !== '' && data[5] !== '' && data[6] !== '' && data[7] == null) { //data[0] !== null && data[0] !== '' && data[1] == null
       //   dateofbirth = data[6];
 
-      msg = `CON Enter Email Address`;
+      msg = `CON Enter Email Address. \n Or press 0 to skip this step.`;
       res.send(msg);
     } else if (data[0] !== '' && data[1] !== '' && data[2] !== '' && data[3] == null) { //data[0] !== null && data[0] !== '' && data[1] == null
       email = data[2];
