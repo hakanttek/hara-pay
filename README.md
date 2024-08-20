@@ -18,7 +18,8 @@ HaraPay is a game-changer, seamlessly integrating with existing protocols and to
 - **Token Transactions (Transfer, Buy, Sell)** 
 - **Crypto-to-Bank Conversion** 
 - **Secure PIN-based Authentication** 
-- **SMS Confirmation for Transactions** 
+- **SMS Confirmation for Transactions**
+-  **NFT Trading** 
 
 ### Future Innovations
 Crypto Debit Cards: Enable users to spend crypto directly from their HaraPay wallets.
@@ -36,11 +37,11 @@ HaraPay aims to revolutionize financial services in Africa and Beyond, providing
 
 ## Team
 
-- **Amaan:** Frontend and EVM Contracts
+- **Blossom:** Frontend developer
 - **Fredrick:** Project Management and UI/UX Development
 - **Kyler:** Smart Contract Development and Security
 - **Darren:** Finance, Economics, Basic Coding, QA
-- **Hakan:** Solidity and Mobile App Development
+- **Hakan:** Backend developer 
 
 ## Roadmap
 
