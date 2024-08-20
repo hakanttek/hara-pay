@@ -1,3 +1,16 @@
+## Setup, Configuration, and Testing Instructions
+
+1. **Firebase Service Account:** Generate the required `serviceAccountKey.json` and place it in the `src/application/serviceAccountKey.json` file.
+
+2. **Environment Variables:** Define `ACCOUNT_ID` and `PRIVATE_KEY` (DER Encoded Private Key) in the `api/.env` file.
+
+3. **Testing Instructions:** 
+   - Ensure all necessary configurations and environment variables are set (see steps 1 and 2).
+   - Navigate to the `src/api` directory.
+   - Run `npm start` to start the server and perform tests.
+
+4. **API Endpoints:** To explore and test the API endpoints, refer to the Swagger documentation available at `/api-docs/`.
+
 ---
 
 # What is HaraPay? 
