@@ -40,6 +40,9 @@ HaraPay steps in as a solution to bridge the gap between blockchain and traditio
 
 HaraPay is a game-changer, seamlessly integrating with existing protocols and tools to offer a straightforward and user-friendly interface for cryptocurrency and fiat transactions. Instead of navigating multiple platforms to perform a single transaction, HaraPay provides an all-in-one solution. With HaraPay, managing your finances becomes as simple as dialing a short code on your mobile device.
 
+## Your Personal Account
+Your phone number is more than just a way to stay connected—it's a unique personal identifier that stays with you no matter what. At HaraPay, we leverage this reliability by seamlessly integrating your phone number with your Hedera wallet ID, no need to remember complex addresses anymore, just use your existing number to send and receive funds instantly.
+
 ### Key Features:
 
 - **USSD-based Wallet Creation and Management** 
