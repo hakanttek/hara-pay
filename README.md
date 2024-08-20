@@ -16,7 +16,7 @@
 
 2. Enter the phone number. Click "Connect".
 
-3. Open the "phone" icon, then type this number *384*99899#
+3. Open the "phone" icon, then type this number \*384*99899#
 
 4. You will be accessible for HaraPay's service now.
 
@@ -26,7 +26,7 @@
 3. **Button 6: View Balance**
 
 ## If Error
-If an error occurs during the first input of the number (*384*99899#), wait 1 minute, redial, and call the number. The error should be resolved.
+If an error occurs during the first input of the number (\*384*99899#), wait 1 minute, redial, and call the number. The error should be resolved.
 
 
 # What is HaraPay? 
