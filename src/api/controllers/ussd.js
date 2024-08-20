@@ -8,15 +8,11 @@ const {
   validEmail,
   verifyNewUser,
   firestore,
-  addUserKycToDB,
   getRecipientId,
   checkIfRecipientExists,
   getSenderDetails,
   getSenderPrivateKey,
   getReceiverDetails,
-  sendcUSD,
-  getTxidUrl,
-  sendMessage,
   phoneUtil,
   PNF,
   addUserDataToDB,
@@ -24,8 +20,7 @@ const {
   iv,
   TokenService,
   Client,
-  getLoginPin,
-  PrivateKey
+  getLoginPin
 } = require('hara-pay.application/services/ussd-service')
 const ussdCallback = async (req, res) => {
   res.set('Content-Type: text/plain');
@@ -126,12 +121,6 @@ const ussdCallback = async (req, res) => {
         msg = `END Thank You. \nYour Account Details will be ready shortly`;
         res.send(msg);
         try {
-          // let kycData = {
-          //   "documentType": documentType,
-          //   "documentNumber": documentNumber,
-          //   "dateofbirth": dateofbirth,
-          //   "fullName": `${firstname} ${lastname}`
-          // }
 
           //Update User account and enable
           console.log('email4')
