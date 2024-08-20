@@ -1,4 +1,4 @@
-const { Container, injectable, inject } = require('inversify');
+const { Container } = require('inversify');
 const { Client, Client: NodeClient } = require('@hashgraph/sdk');
 const WalletService = require('hara-pay.application/services/wallet-service');
 const WalletController = require('./controllers/wallet');

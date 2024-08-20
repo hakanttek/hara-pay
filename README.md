@@ -1,8 +1,29 @@
+# Setup, Configuration, and Testing Instructions
+
+1. **Firebase Service Account:** In Firebase Console, select your project, go to `Service accounts`," click "Generate new private key", and place the JSON file in `etc/secrets/serviceAccountKey.json`.
+
+2. **Environment Variables:** Define `ACCOUNT_ID` and `PRIVATE_KEY` (DER Encoded Private Key) in the `api/.env` file.
+
+3. **Testing Instructions:** 
+   - Ensure all necessary configurations and environment variables are set (see steps 1 and 2).
+   - Navigate to the `src/api` directory.
+   - Run `npm start` to start the server and perform tests.
+
+4. **API Endpoints:** To explore and test the API endpoints, refer to the Swagger documentation available at `/api-docs/`.
+
 ---
 
 # What is HaraPay? 
 
 HaraPay is your bridge between traditional financial services and blockchain technology, tailored specifically for Africa. Conducting crypto transactions in regions with limited internet access can be challenging, and HaraPay addresses this by enabling seamless and secure transactions via USSD, eliminating the dependency on internet connectivity.
+
+## Setup and Configuration
+
+- **API Endpoints:** To explore and test the API endpoints, refer to the Swagger documentation available at `/api-docs/`.
+
+- **Firebase Service Account:** Generate the required `serviceAccountKey.json` and place it in the `src/application/serviceAccountKey.json` file.
+
+- **Environment Variables:** Define `ACCOUNT_ID` and `PRIVATE_KEY` (DER Encoded Private Key) in the `api/.env` file.
 
 ## Why HaraPay?
 
@@ -18,7 +39,8 @@ HaraPay is a game-changer, seamlessly integrating with existing protocols and to
 - **Token Transactions (Transfer, Buy, Sell)** 
 - **Crypto-to-Bank Conversion** 
 - **Secure PIN-based Authentication** 
-- **SMS Confirmation for Transactions** 
+- **SMS Confirmation for Transactions**
+-  **NFT Trading** 
 
 ### Future Innovations
 Crypto Debit Cards: Enable users to spend crypto directly from their HaraPay wallets.
@@ -36,11 +58,11 @@ HaraPay aims to revolutionize financial services in Africa and Beyond, providing
 
 ## Team
 
-- **Amaan:** Frontend and EVM Contracts
+- **Blossom:** Frontend developer
 - **Fredrick:** Project Management and UI/UX Development
 - **Kyler:** Smart Contract Development and Security
 - **Darren:** Finance, Economics, Basic Coding, QA
-- **Hakan:** Solidity and Mobile App Development
+- **Hakan:** Backend developer 
 
 ## Roadmap
 
