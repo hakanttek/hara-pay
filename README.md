@@ -81,6 +81,11 @@ HaraPay aims to revolutionize financial services in Africa and Beyond, providing
 - **Phase 3:** Expand to Other African Countries
 - **Phase 4:** Global Expansion
 
+# Current Functionalities
+1. **Create Wallet Function** 
+2. **Button 3: Transfer Token** 
+3. **Button 6: View Balance**
+
 ---
 ### Contact:
 For more information, please contact us at info.harapay@gmail.com
